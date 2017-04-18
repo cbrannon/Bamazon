@@ -18,6 +18,40 @@ connection.connect(function(err) {
     inquireCommand();
 });
 
+function getDepartments() {
+    connection.query(
+    "SELECT department_id, department_name, over_head_costs, total_sales, total_sales - over_head_costs AS total_profit FROM departments",
+        function(err, res) {
+        if (err) throw err;
+        res.forEach(currentItem => {
+            console.log("ID: " + currentItem.department_id + " || Department Name: " + currentItem.department_name + " || Overhead Costs: " + currentItem.over_head_costs + " || Sales: " + currentItem.total_sales  + " || Profit: " + currentItem.total_profit);
+        });
+        inquireCommand();
+    });
+}
+
+function addDepartment(name, overhead, sales) {
+    connection.query(
+        "SELECT department_name FROM departments WHERE department_name=?",
+        [name],
+        function(err, res) {
+            if (err) throw err;
+            if (!res.length) {
+                connection.query(
+                "INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES (?, ?, ?)",
+                    [name, overhead, sales],
+                    function(err, res) {
+                    if (err) throw err;
+                    inquireCommand();
+                });
+            } else {
+                console.log("Department already exists.\n");
+                inquireCommand();
+            }
+        }
+    )
+}
+
 function inquireCommand() {
     inquirer.prompt([
         {
@@ -50,18 +84,6 @@ function inquireCommand() {
     .catch((error) => {
         throw error;
     })
-}
-
-function getDepartments() {
-    connection.query(
-    "SELECT department_id, department_name, over_head_costs, total_sales, total_sales - over_head_costs AS total_profit FROM departments",
-        function(err, res) {
-        if (err) throw err;
-        res.forEach(currentItem => {
-            console.log("ID: " + currentItem.department_id + " || Department Name: " + currentItem.department_name + " || Overhead Costs: " + currentItem.over_head_costs + " || Sales: " + currentItem.total_sales  + " || Profit: " + currentItem.total_profit);
-        });
-        inquireCommand();
-    });
 }
 
 function inquireCreateDepartment() {
@@ -100,24 +122,3 @@ function inquireCreateDepartment() {
     })
 }
 
-function addDepartment(name, overhead, sales) {
-    connection.query(
-        "SELECT department_name FROM products WHERE department_name=?",
-        [department],
-        function(err, res) {
-            if (err) throw err;
-            if (res.length) {
-                connection.query(
-                "INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)",
-                    [name, department, price, quantity],
-                    function(err, res) {
-                    if (err) throw err;
-                    getProducts();
-                });
-            } else {
-                console.log("Department does not exist. Please wait for supervisor to add department.");
-                getProducts();
-            }
-        }
-    )
-}

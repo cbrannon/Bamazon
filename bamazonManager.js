@@ -41,7 +41,7 @@ function getLowStock() {
             });
             inquireCommand();
         } else {
-            console.log("No products with low stock");
+            console.log("No products with low stock\n");
             inquireCommand();
         }
     });
@@ -72,7 +72,7 @@ function addProduct(name, department, price, quantity) {
                     getProducts();
                 });
             } else {
-                console.log("Department does not exist. Please wait for supervisor to add department.");
+                console.log("Department does not exist. Please wait for supervisor to add department.\n");
                 getProducts();
             }
         }

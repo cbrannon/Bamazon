@@ -42,7 +42,7 @@ function makePurchase(item, price, department, quantity, currentStock) {
             "UPDATE departments SET total_sales = total_sales + ? WHERE department_name=?",
             [total, department],
             function(err, res) {
-                console.log("Your total is: $" + total);
+                console.log("Your total is: $" + total + "\n");
                 getProducts();
             }
         )
@@ -76,7 +76,7 @@ function inquireCommand() {
                  function(err, res) {
                     if (err) throw err;
                     if (response.quantity > res[0].stock_quantity) {
-                        console.log("Insufficient quantity!");
+                        console.log("Insufficient quantity!\n");
                         getProducts();
                     } else {
                         makePurchase(res[0].item_id, res[0].price, res[0].department_name, response.quantity, res[0].stock_quantity);
