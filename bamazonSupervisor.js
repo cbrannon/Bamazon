@@ -37,13 +37,18 @@ function addDepartment(name, overhead, sales) {
         function(err, res) {
             if (err) throw err;
             if (!res.length) {
-                connection.query(
-                "INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES (?, ?, ?)",
-                    [name, overhead, sales],
-                    function(err, res) {
-                    if (err) throw err;
+                if (department_name !== "") {
+                    connection.query(
+                    "INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES (?, ?, ?)",
+                        [name, overhead, sales],
+                        function(err, res) {
+                        if (err) throw err;
+                        inquireCommand();
+                    });
+                } else {
+                    console.log("Not a valid department name.");
                     inquireCommand();
-                });
+                }
             } else {
                 console.log("Department already exists.\n");
                 inquireCommand();

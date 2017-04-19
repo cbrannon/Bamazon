@@ -18,7 +18,6 @@ connection.connect(function(err) {
   getProducts();
 });
 
-
 function getProducts() {
     connection.query(
     "SELECT item_id, product_name, price FROM products",
@@ -75,15 +74,21 @@ function inquireCommand() {
                 [response.item_id],
                  function(err, res) {
                     if (err) throw err;
-                    if (response.quantity > res[0].stock_quantity) {
-                        console.log("Insufficient quantity!\n");
+                    if (!res.length || isNaN(response.quantity)) {
+                        console.log("Please choose product and enter valid quantity.\n");
                         getProducts();
+                        
                     } else {
-                        makePurchase(res[0].item_id, res[0].price, res[0].department_name, response.quantity, res[0].stock_quantity);
+                        if (response.quantity > res[0].stock_quantity) {
+                            console.log("Insufficient quantity!\n");
+                            getProducts();
+                        } else if (response.item_id){
+                            makePurchase(res[0].item_id, res[0].price, res[0].department_name, response.quantity, res[0].stock_quantity);
+                        }
                     }
                 });
         } else {
-
+            getProducts();
         }
     })
     .catch((error) => {
