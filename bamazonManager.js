@@ -123,12 +123,12 @@ function inquireAddStock() {
      inquirer.prompt([
         {
             type: "input",
-            message: "Enter ID of product you would like to add stock to",
+            message: "Enter ID of product you would like to add stock to:",
             name: "item_id"
         },
         {
             type: "input",
-            message: "How many would you like to add?",
+            message: "Enter quantity:",
             name: "quantity"
         },
          {
@@ -154,22 +154,22 @@ function inquireAddProduct() {
      inquirer.prompt([
         {
             type: "input",
-            message: "Name of product",
+            message: "Name of product:",
             name: "product_name"
         },
         {
             type: "input",
-            message: "Name of department",
+            message: "Name of department:",
             name: "department_name"
         },
         {
             type: "input",
-            message: "Price of product",
+            message: "Price of product:",
             name: "price"
         },
         {
             type: "input",
-            message: "Current stock quantity",
+            message: "Current stock quantity:",
             name: "quantity"
         },
          {
@@ -181,7 +181,12 @@ function inquireAddProduct() {
     ])
     .then((response) => {
         if (response.confirm) {
-            addProduct(response.product_name, response.department_name, response.price, response.quantity);
+            if (response.product_name != "" && !isNaN(response.price) && !isNaN(response.quantity)) {
+                 addProduct(response.product_name, response.department_name, response.price, response.quantity);
+            } else {
+                console.log("Please enter new product in the correct format.\n");
+                inquireCommand();
+            }
         } else {
             inquireCommand();
         }
