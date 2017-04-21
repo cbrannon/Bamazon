@@ -37,7 +37,7 @@ function addDepartment(name, overhead, sales) {
         function(err, res) {
             if (err) throw err;
             if (!res.length) {
-                if (department_name !== "") {
+                if (name !== "") {
                     connection.query(
                     "INSERT INTO departments (department_name, over_head_costs, total_sales) VALUES (?, ?, ?)",
                         [name, overhead, sales],
